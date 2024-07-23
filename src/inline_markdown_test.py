@@ -10,9 +10,9 @@ from textnode import (
     text_type_italic,
     text_type_code,
 )
+#^Imports necessary variables, classes and functions
 
-
-class TestInlineMarkdown(unittest.TestCase):
+class TestInlineMarkdown(unittest.TestCase):#Tests to ensure that all split delimeters are in correct position and correct syntax
     def test_delim_bold(self):
         node = TextNode("This is text with a **bolded** word", text_type_text)
         new_nodes = split_nodes_delimiter([node], "**", text_type_bold)

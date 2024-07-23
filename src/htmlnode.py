@@ -1,14 +1,14 @@
-class HTMLNode:
+class HTMLNode:#Create the HTMLNode class and assign values
     def __init__(self, tag=None, value=None, children=None, props=None):
         self.tag = tag
         self.value = value
         self.children = children
         self.props = props
 
-    def to_html(self):
+    def to_html(self):#to_html error raiser
         raise NotImplementedError("to_html method not implemented")
 
-    def props_to_html(self):
+    def props_to_html(self):#Create props method, empty string if props is none, else returns list of string of props
         if self.props is None:
             return ""
         props_html = ""
@@ -16,11 +16,11 @@ class HTMLNode:
             props_html += f' {prop}="{self.props[prop]}"'
         return props_html
 
-    def __repr__(self):
+    def __repr__(self):#returns the combined string of all variables set
         return f"HTMLNode({self.tag}, {self.value}, children: {self.children}, {self.props})"
 
 
-class LeafNode(HTMLNode):
+class LeafNode(HTMLNode):#Child class of HTMLNode creating a string of markdown syntax
     def __init__(self, tag, value, props=None):
         super().__init__(tag, value, None, props)
 
@@ -35,7 +35,7 @@ class LeafNode(HTMLNode):
         return f"LeafNode({self.tag}, {self.value}, {self.props})"
 
 
-class ParentNode(HTMLNode):
+class ParentNode(HTMLNode):#Child class of HTMLNode creating a string of markdown text for children
     def __init__(self, tag, children, props=None):
         super().__init__(tag, None, children, props)
 

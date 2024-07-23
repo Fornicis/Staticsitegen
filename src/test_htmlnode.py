@@ -1,8 +1,8 @@
 import unittest
-from htmlnode import LeafNode, ParentNode, HTMLNode
+from htmlnode import LeafNode, ParentNode, HTMLNode#Imports all necessary classes and modules
 
 
-class TestHTMLNode(unittest.TestCase):
+class TestHTMLNode(unittest.TestCase):#Tests proper outputs from to_html_(class)
     def test_to_html_props(self):
         node = HTMLNode(
             "div",

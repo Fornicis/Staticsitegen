@@ -1,6 +1,6 @@
-import unittest
+import unittest#Imports the UnitTest module
 
-from textnode import (
+from textnode import (#Imports vital code types
     TextNode,
     text_type_text,
     text_type_bold,
@@ -12,7 +12,7 @@ from textnode import (
 )
 
 
-class TestTextNode(unittest.TestCase):
+class TestTextNode(unittest.TestCase):#Tests the TextNode class
     def test_eq(self):
         node = TextNode("This is a text node", text_type_text)
         node2 = TextNode("This is a text node", text_type_text)
@@ -40,7 +40,7 @@ class TestTextNode(unittest.TestCase):
         )
 
 
-class TestTextNodeToHTMLNode(unittest.TestCase):
+class TestTextNodeToHTMLNode(unittest.TestCase):#Tests the compatability of TextNode and toHtmlNode
     def test_text(self):
         node = TextNode("This is a text node", text_type_text)
         html_node = text_node_to_html_node(node)
