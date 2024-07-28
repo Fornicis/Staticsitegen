@@ -5,7 +5,8 @@ from textnode import (#Imports necessary classes and variables
     text_type_italic,
     text_type_code,
 )
-
+import unittest
+import re
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):#Function splits nodes by their delimiter
     new_nodes = []#Creates empty list for result
@@ -26,3 +27,11 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):#Function splits node
                 split_nodes.append(TextNode(sections[i], text_type))
         new_nodes.extend(split_nodes)
     return new_nodes
+
+def extract_markdown_images(text):#Takes an image markdown and breaks it down to its name and url
+    image_markdown = re.findall(r"!\[(.*?)\]\((.*?)\)", text)
+    return image_markdown
+
+def extract_markdown_links(text):#Takes a link markdown and breaks it down to its name and link
+    link_markdown = re.findall(r"\[(.*?)\]\((.*?)\)", text)
+    return link_markdown

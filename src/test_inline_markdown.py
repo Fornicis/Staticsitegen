@@ -1,6 +1,8 @@
 import unittest
 from inline_markdown import (
     split_nodes_delimiter,
+    extract_markdown_images,
+    extract_markdown_links
 )
 
 from textnode import (
@@ -91,7 +93,46 @@ class TestInlineMarkdown(unittest.TestCase):#Tests to ensure that all split deli
             ],
             new_nodes,
         )
+class TestInlineMarkdownLinks(unittest.TestCase):
+    def test_single_link(self):
+        text = "This is text with a link [to boot dev](https://www.boot.dev)"
+        extract_text = extract_markdown_links(text)
+        self.assertListEqual([("to boot dev", "https://www.boot.dev")], extract_text)
 
+    def test_double_link(self):
+        text = "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)"
+        extract_text = extract_markdown_links(text)
+        self.assertListEqual([("to boot dev", "https://www.boot.dev"), 
+                          ("to youtube", "https://www.youtube.com/@bootdotdev")],
+                          extract_text)
+        
+    def test_triple_link(self):
+        text = "This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev) and [to runescape](https://www.runescape.com/community)"
+        extract_text = extract_markdown_links(text)
+        self.assertListEqual([("to boot dev", "https://www.boot.dev"),
+                          ("to youtube", "https://www.youtube.com/@bootdotdev"),
+                          ("to runescape", "https://www.runescape.com/community")],
+                          extract_text)
+        
+    def test_single_image(self):
+        image = "This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif)"
+        extract_image = extract_markdown_images(image)
+        self.assertListEqual([("rick roll", "https://i.imgur.com/aKaOqIh.gif")], extract_image)
 
+    def test_double_image(self):
+        image = "This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)"
+        extract_image = extract_markdown_images(image)
+        self.assertListEqual([("rick roll", "https://i.imgur.com/aKaOqIh.gif"),
+                        ("obi wan", "https://i.imgur.com/fJRm4Vk.jpeg")],
+                        extract_image)
+        
+    def test_triple_image(self):
+        image = "This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg) and ![dragon full helm](https://static.wikia.nocookie.net/runescape2/images/a/ae/Dragon_full_helm_detail.png/revision/latest?cb=20120611222412)"
+        extract_image = extract_markdown_images(image)
+        self.assertListEqual([("rick roll", "https://i.imgur.com/aKaOqIh.gif"),
+                        ("obi wan", "https://i.imgur.com/fJRm4Vk.jpeg"),
+                        ("dragon full helm", "https://static.wikia.nocookie.net/runescape2/images/a/ae/Dragon_full_helm_detail.png/revision/latest?cb=20120611222412")],
+                        extract_image)
+        
 if __name__ == "__main__":
     unittest.main()
