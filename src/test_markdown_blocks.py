@@ -1,5 +1,6 @@
 import unittest
 from markdown_blocks import (
+    markdown_to_html_node,
     markdown_to_blocks,
     block_to_block_type,
     block_type_paragraph,
@@ -86,6 +87,124 @@ class TestBlockToBlock(unittest.TestCase):
         # Test if the function correctly identifies a paragraph block.
         block = "paragraph"
         self.assertEqual(block_to_block_type(block), block_type_paragraph)
+
+class TestMarkdownToHtml(unittest.TestCase):
+    # Test case for a single paragraph with bolded text.
+    def test_paragraph(self):
+        md = """
+This is **bolded** paragraph
+text in a p
+tag here
+
+"""
+        # Convert markdown to HTML node tree.
+        node = markdown_to_html_node(md)
+        # Convert the HTML node tree to HTML string.
+        html = node.to_html()
+        # Assert the HTML output matches the expected value.
+        self.assertEqual(
+            html,
+            "<div><p>This is <b>bolded</b> paragraph text in a p tag here</p></div>",
+        )
+
+    # Test case for multiple paragraphs with mixed formatting.
+    def test_paragraphs(self):
+        md = """
+This is **bolded** paragraph
+text in a p
+tag here
+
+This is another paragraph with *italic* text and `code` here
+
+"""
+        # Convert markdown to HTML node tree.
+        node = markdown_to_html_node(md)
+        # Convert the HTML node tree to HTML string.
+        html = node.to_html()
+        # Assert the HTML output matches the expected value.
+        self.assertEqual(
+            html,
+            "<div><p>This is <b>bolded</b> paragraph text in a p tag here</p><p>This is another paragraph with <i>italic</i> text and <code>code</code> here</p></div>",
+        )
+
+    # Test case for unordered and ordered lists.
+    def test_lists(self):
+        md = """
+- This is a list
+- with items
+- and *more* items
+
+1. This is an `ordered` list
+2. with items
+3. and more items
+
+"""
+        # Convert markdown to HTML node tree.
+        node = markdown_to_html_node(md)
+        # Convert the HTML node tree to HTML string.
+        html = node.to_html()
+        # Assert the HTML output matches the expected value.
+        self.assertEqual(
+            html,
+            "<div><ul><li>This is a list</li><li>with items</li><li>and <i>more</i> items</li></ul><ol><li>This is an <code>ordered</code> list</li><li>with items</li><li>and more items</li></ol></div>",
+        )
+
+    # Test case for headings and paragraph text.
+    def test_headings(self):
+        md = """
+# this is an h1
+
+this is paragraph text
+
+## this is an h2
+"""
+        # Convert markdown to HTML node tree.
+        node = markdown_to_html_node(md)
+        # Convert the HTML node tree to HTML string.
+        html = node.to_html()
+        # Assert the HTML output matches the expected value.
+        self.assertEqual(
+            html,
+            "<div><h1>this is an h1</h1><p>this is paragraph text</p><h2>this is an h2</h2></div>",
+        )
+
+    # Test case for blockquote and paragraph text.
+    def test_blockquote(self):
+        md = """
+> This is a
+> blockquote block
+
+this is paragraph text
+
+"""
+        # Convert markdown to HTML node tree.
+        node = markdown_to_html_node(md)
+        # Convert the HTML node tree to HTML string.
+        html = node.to_html()
+        # Assert the HTML output matches the expected value.
+        self.assertEqual(
+            html,
+            "<div><blockquote>This is a blockquote block</blockquote><p>this is paragraph text</p></div>",
+        )
+
+    # Test case for blockquote and paragraph text (duplicate test, can be removed).
+    def test_blockquote(self):
+        md = """
+> This is a
+> blockquote block
+
+this is paragraph text
+
+"""
+        # Convert markdown to HTML node tree.
+        node = markdown_to_html_node(md)
+        # Convert the HTML node tree to HTML string.
+        html = node.to_html()
+        # Assert the HTML output matches the expected value.
+        self.assertEqual(
+            html,
+            "<div><blockquote>This is a blockquote block</blockquote><p>this is paragraph text</p></div>",
+        )
 
 
 if __name__ == "__main__":
