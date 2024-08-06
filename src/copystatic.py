@@ -1,7 +1,7 @@
 import os
 import shutil
 
-# Function to recursively copy files and directories from source to destination
+# Function to copy files and directories recursively from source to destination
 def copy_files_recursive(source_dir_path, dest_dir_path):
     # Check if the destination directory exists, if not, create it
     if not os.path.exists(dest_dir_path):
@@ -9,17 +9,14 @@ def copy_files_recursive(source_dir_path, dest_dir_path):
 
     # Iterate through all items in the source directory
     for filename in os.listdir(source_dir_path):
-        # Construct full path to source and destination
+        # Construct full path for source and destination
         from_path = os.path.join(source_dir_path, filename)
         dest_path = os.path.join(dest_dir_path, filename)
-        
-        # Print the source and destination paths
         print(f" * {from_path} -> {dest_path}")
-        
-        # Check if the current item is a file
+        # Check if the item is a file
         if os.path.isfile(from_path):
-            # Copy the file to the destination directory
+            # Copy the file to the destination
             shutil.copy(from_path, dest_path)
         else:
-            # If the current item is a directory, call the function recursively
+            # If the item is a directory, call the function recursively
             copy_files_recursive(from_path, dest_path)

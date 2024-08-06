@@ -1,11 +1,28 @@
 import os
+from pathlib import Path
 from markdown_blocks import markdown_to_html_node
+
+# Function to recursively generate HTML pages from markdown content
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+    # Iterate over each item in the content directory
+    for filename in os.listdir(dir_path_content):
+        # Construct the full source and destination paths
+        from_path = os.path.join(dir_path_content, filename)
+        dest_path = os.path.join(dest_dir_path, filename)
+        # Check if the current item is a file
+        if os.path.isfile(from_path):
+            # Change the extension of the destination file to .html
+            dest_path = Path(dest_path).with_suffix(".html")
+            # Generate the HTML page
+            generate_page(from_path, template_path, dest_path)
+        else:
+            # If the item is a directory, call this function recursively
+            generate_pages_recursive(from_path, template_path, dest_path)
 
 # Function to generate an HTML page from a markdown file and a template
 def generate_page(from_path, template_path, dest_path):
-    # Log the paths being processed
+    # Log the file paths being processed
     print(f" * {from_path} {template_path} -> {dest_path}")
-
     # Open and read the markdown file
     from_file = open(from_path, "r")
     markdown_content = from_file.read()
@@ -16,14 +33,14 @@ def generate_page(from_path, template_path, dest_path):
     template = template_file.read()
     template_file.close()
 
-    # Convert the markdown content to an HTML node
+    # Convert markdown content to an HTML node
     node = markdown_to_html_node(markdown_content)
-    # Convert the HTML node to a string of HTML
+    # Convert the HTML node to HTML string
     html = node.to_html()
 
     # Extract the title from the markdown content
     title = extract_title(markdown_content)
-    # Replace placeholders in the template with the actual title and content
+    # Replace the placeholders in the template with the title and content
     template = template.replace("{{ Title }}", title)
     template = template.replace("{{ Content }}", html)
 
@@ -31,20 +48,18 @@ def generate_page(from_path, template_path, dest_path):
     dest_dir_path = os.path.dirname(dest_path)
     if dest_dir_path != "":
         os.makedirs(dest_dir_path, exist_ok=True)
-    
-    # Write the final HTML to the destination file
+    # Write the rendered HTML to the destination file
     to_file = open(dest_path, "w")
     to_file.write(template)
 
-# Function to extract the title from the markdown content
+# Function to extract the title from markdown content
 def extract_title(md):
     # Split the markdown content into lines
     lines = md.split("\n")
-    # Iterate over the lines to find the title
+    # Iterate over the lines to find the first level 1 heading
     for line in lines:
-        # Check if the line starts with a level 1 heading indicator ("# ")
         if line.startswith("# "):
-            # Return the title, which follows the "# "
+            # Return the text after "# " as the title
             return line[2:]
     # Raise an error if no title is found
     raise ValueError("No title found")
