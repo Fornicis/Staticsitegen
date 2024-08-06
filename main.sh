@@ -1,1 +1,2 @@
-python3 src/main.py #runs main python file
+python3 src/main.py
+cd public && python3 -m http.server 8888

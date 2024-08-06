@@ -9,6 +9,30 @@ from textnode import (#Imports necessary classes and variables
 )
 import re
 
+def text_to_textnodes(text):
+    # Function to convert a given text into a list of TextNode objects, processing various Markdown formatting and media types.
+
+    # Initialize the list of nodes with a single TextNode containing the entire input text.
+    nodes = [TextNode(text, text_type_text)]
+    
+    # Process bold text by splitting the nodes on the '**' delimiter and tagging bold text.
+    nodes = split_nodes_delimiter(nodes, "**", text_type_bold)
+    
+    # Process italic text by splitting the nodes on the '*' delimiter and tagging italic text.
+    nodes = split_nodes_delimiter(nodes, "*", text_type_italic)
+    
+    # Process inline code by splitting the nodes on the '`' delimiter and tagging code text.
+    nodes = split_nodes_delimiter(nodes, "`", text_type_code)
+    
+    # Process image nodes by splitting and creating separate nodes for image references.
+    nodes = split_nodes_image(nodes)
+    
+    # Process link nodes by splitting and creating separate nodes for link references.
+    nodes = split_nodes_link(nodes)
+    
+    # Return the list of processed TextNode objects.
+    return nodes
+
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
     # Function to split nodes by their delimiter and categorize text types.
 
@@ -172,26 +196,4 @@ def split_nodes_link(old_nodes):
     return new_nodes  # Return the list of new nodes after processing.
 
 
-def text_to_textnodes(text):
-    # Function to convert a given text into a list of TextNode objects, processing various Markdown formatting and media types.
 
-    # Initialize the list of nodes with a single TextNode containing the entire input text.
-    nodes = [TextNode(text, text_type_text)]
-    
-    # Process bold text by splitting the nodes on the '**' delimiter and tagging bold text.
-    nodes = split_nodes_delimiter(nodes, "**", text_type_bold)
-    
-    # Process italic text by splitting the nodes on the '*' delimiter and tagging italic text.
-    nodes = split_nodes_delimiter(nodes, "*", text_type_italic)
-    
-    # Process inline code by splitting the nodes on the '`' delimiter and tagging code text.
-    nodes = split_nodes_delimiter(nodes, "`", text_type_code)
-    
-    # Process image nodes by splitting and creating separate nodes for image references.
-    nodes = split_nodes_image(nodes)
-    
-    # Process link nodes by splitting and creating separate nodes for link references.
-    nodes = split_nodes_link(nodes)
-    
-    # Return the list of processed TextNode objects.
-    return nodes
